@@ -61,12 +61,7 @@ namespace Library.API
             libraryContext.EnsureSeedDataForContext();
 
             app.UseHttpsRedirection();
-            app.UseMvc(routes =>
-            {
-                routes.MapRoute(
-                    name: "default",
-                    template: "{controller}/{action}/{id?}");
-            });
+            app.UseMvc();
         }
     }
 }
