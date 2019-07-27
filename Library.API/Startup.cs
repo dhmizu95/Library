@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Formatters;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -26,8 +27,11 @@ namespace Library.API
         {
             services.AddAutoMapper(typeof(Startup));
 
-            services.AddMvc(options =>
-                options.EnableEndpointRouting = false)
+            services.AddMvc(setupAction =>
+                {
+                    setupAction.ReturnHttpNotAcceptable = true;
+                    setupAction.OutputFormatters.Add(new XmlDataContractSerializerOutputFormatter());
+                })
                 .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddDbContext<LibraryContext>(opt =>
