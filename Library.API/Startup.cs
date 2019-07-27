@@ -25,7 +25,9 @@ namespace Library.API
         {
             services.AddAutoMapper(typeof(Startup));
 
-            services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
+            services.AddMvc(options =>
+                options.EnableEndpointRouting = false)
+                .SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddDbContext<LibraryContext>(opt =>
                 opt.UseMySql((Configuration.GetConnectionString("DefaultConnection"))));
@@ -51,7 +53,12 @@ namespace Library.API
             libraryContext.EnsureSeedDataForContext();
 
             app.UseHttpsRedirection();
-            app.UseMvc();
+            app.UseMvc(routes =>
+            {
+                routes.MapRoute(
+                    name: "default",
+                    template: "{controller}/{action}/{id?}");
+            });
         }
     }
 }

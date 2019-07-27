@@ -33,11 +33,19 @@ namespace Library.API.Controllers
             return Ok(authors);
         }
 
-        // GET api/values/5
         [HttpGet("{id}")]
-        public ActionResult<string> Get(int id)
+        public IActionResult GetAuthor(Guid id)
         {
-            return "value";
+            var authorFromRepo = _libraryRepository.GetAuthor(id);
+
+            if (authorFromRepo == null)
+            {
+                return NotFound();
+            }
+
+            var author = _mapper.Map<AuthorDto>(authorFromRepo);
+
+            return Ok(author);
         }
 
         // POST api/values
