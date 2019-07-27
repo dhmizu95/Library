@@ -1,4 +1,5 @@
-﻿using Library.API.Entities;
+﻿using AutoMapper;
+using Library.API.Entities;
 using Library.API.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -22,10 +23,13 @@ namespace Library.API
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.AddAutoMapper(typeof(Startup));
+
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_2);
 
             services.AddDbContext<LibraryContext>(opt =>
                 opt.UseMySql((Configuration.GetConnectionString("DefaultConnection"))));
+
 
             services.AddScoped<ILibraryRepository, LibraryRepository>();
         }

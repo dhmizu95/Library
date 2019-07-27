@@ -2,19 +2,35 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using Library.API.Models;
+using Library.API.Services;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Library.API.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ValuesController : ControllerBase
+    public class AuthorsController : ControllerBase
     {
+        private readonly ILibraryRepository _libraryRepository;
+        private readonly IMapper _mapper;
+
+        public AuthorsController(ILibraryRepository libraryRepository, IMapper mapper)
+        {
+            _libraryRepository = libraryRepository;
+            _mapper = mapper;
+        }
+
         // GET api/values
         [HttpGet]
-        public ActionResult<IEnumerable<string>> Get()
+        public IActionResult GetAuthors()
         {
-            return new string[] { "value1", "value2" };
+            var authorsFromRepo = _libraryRepository.GetAuthors();
+
+            var authors = _mapper.Map<IEnumerable<AuthorDto>>(authorsFromRepo);
+
+            return Ok(authors);
         }
 
         // GET api/values/5
